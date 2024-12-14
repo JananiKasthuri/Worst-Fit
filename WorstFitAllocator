@@ -1,0 +1,71 @@
+import java.util.ArrayList;
+
+public class WorstFitAllocator {
+
+    private ArrayList<Integer> memoryBlocks; 
+
+    // Constructor to initialize the list of memory blocks
+    public WorstFitAllocator(ArrayList<Integer> memoryBlocks) {
+        this.memoryBlocks = memoryBlocks;
+    }
+
+    // Method to allocate memory using the Worst Fit strategy
+    public boolean allocateMemory(int processSize) {
+        int maxIndex = -1;
+        int maxSize = -1;
+
+        // Find the largest block that can fit the process
+        for (int i = 0; i < memoryBlocks.size(); i++) {
+            int blockSize = memoryBlocks.get(i);
+            if (blockSize >= processSize && blockSize > maxSize) {
+                maxSize = blockSize;
+                maxIndex = i;
+            }
+        }
+
+        // Allocate memory if a suitable block is found
+        if (maxIndex != -1) {
+            int updatedSize = memoryBlocks.get(maxIndex) - processSize;
+            memoryBlocks.set(maxIndex, updatedSize);
+            System.out.println("Allocated " + processSize + " KB from block of size " + maxSize + " KB.");
+            return true;
+        } else {
+            System.out.println("Failed to allocate " + processSize + " KB. No suitable block found.");
+            return false;
+        }
+    }
+
+    // Method to display the current state of memory blocks
+    public void displayMemoryBlocks() {
+        System.out.println("Current memory blocks: " + memoryBlocks);
+    }
+
+    public static void main(String[] args) {
+        // Initialize memory blocks
+        ArrayList<Integer> initialBlocks = new ArrayList<>();
+        initialBlocks.add(50);
+        initialBlocks.add(200);
+        initialBlocks.add(300);
+        initialBlocks.add(350);
+        initialBlocks.add(600);
+
+        WorstFitAllocator allocator = new WorstFitAllocator(initialBlocks);
+
+        // Display initial memory blocks
+        allocator.displayMemoryBlocks();
+
+        // Simulate memory allocation
+        allocator.allocateMemory(210);
+        allocator.displayMemoryBlocks();
+
+        allocator.allocateMemory(100);
+        allocator.displayMemoryBlocks();
+
+        allocator.allocateMemory(500);
+        allocator.displayMemoryBlocks();
+
+        allocator.allocateMemory(50);
+        allocator.displayMemoryBlocks();
+    }
+}
+
